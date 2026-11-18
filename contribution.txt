@@ -1,0 +1,44 @@
+
+$startDate = Get-Date "2024-06-06"
+$endDate = Get-Date "2025-02-28"
+
+$currentDate = $startDate
+
+while ($currentDate -le $endDate) {
+
+    # 40% chance of commits, 60% chance of no commits
+    if ((Get-Random -Minimum 1 -Maximum 101) -le 10) {
+        $commitCount = Get-Random -Minimum 3 -Maximum 7   # 1 to 3 commits
+    }
+    else {
+        $commitCount = 0
+    }
+
+    for ($i = 1; $i -le $commitCount; $i++) {
+
+        Add-Content contributation.txt "$(Get-Random)"
+        git add contributation.txt
+
+        $hour = Get-Random -Minimum 8 -Maximum 22
+        $minute = Get-Random -Minimum 0 -Maximum 60
+        $second = Get-Random -Minimum 0 -Maximum 60
+
+        $commitDate = Get-Date `
+            -Year $currentDate.Year `
+            -Month $currentDate.Month `
+            -Day $currentDate.Day `
+            -Hour $hour `
+            -Minute $minute `
+            -Second $second
+
+        $env:GIT_AUTHOR_DATE = $commitDate.ToString("yyyy-MM-ddTHH:mm:ss")
+        $env:GIT_COMMITTER_DATE = $env:GIT_AUTHOR_DATE
+
+        git commit -m "Activity $i"
+    }
+
+    $currentDate = $currentDate.AddDays(1)
+}
+
+Remove-Item Env:GIT_AUTHOR_DATE -ErrorAction SilentlyContinue
+Remove-Item Env:GIT_COMMITTER_DATE -ErrorAction SilentlyContinue
