@@ -8,6 +8,7 @@
 <body>
   <h1>Welcome to LMS</h1>
   <h2>Learning Management System</h2>
+  <h2>My LMS Project</h2>
   <p>Manage your courses and learning.</p>
   <button>View Courses</button>
 </body>
